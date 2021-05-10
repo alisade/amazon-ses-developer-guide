@@ -39,63 +39,71 @@ The following code example is a complete solution for sending email through the 
 27.             // If you comment out this line, you also need to remove or comment out
 28.             // the "X-SES-CONFIGURATION-SET" header below.
 29.             String CONFIGSET = "ConfigSet";
-30. 
-31.             // If you're using Amazon SES in a region other than US West (Oregon), 
-32.             // replace email-smtp.us-west-2.amazonaws.com with the Amazon SES SMTP  
-33.             // endpoint in the appropriate AWS Region.
-34.             String HOST = "email-smtp.us-west-2.amazonaws.com";
-35. 
-36.             // The port you will connect to on the Amazon SES SMTP endpoint. We
-37.             // are choosing port 587 because we will use STARTTLS to encrypt
-38.             // the connection.
-39.             int PORT = 587;
-40. 
-41.             // The subject line of the email
-42.             String SUBJECT =
-43.                 "Amazon SES test (SMTP interface accessed using C#)";
+30.             // Adding message tags
+31.             String TAG0 = "key0=value0";
+32.             String TAG1 = "key1=value1";
+33.             
+34. 
+35.             // If you're using Amazon SES in a region other than US West (Oregon), 
+36.             // replace email-smtp.us-west-2.amazonaws.com with the Amazon SES SMTP  
+37.             // endpoint in the appropriate AWS Region.
+38.             String HOST = "email-smtp.us-west-2.amazonaws.com";
+39. 
+40.             // The port you will connect to on the Amazon SES SMTP endpoint. We
+41.             // are choosing port 587 because we will use STARTTLS to encrypt
+42.             // the connection.
+43.             int PORT = 587;
 44. 
-45.             // The body of the email
-46.             String BODY =
-47.                 "<h1>Amazon SES Test</h1>" +
-48.                 "<p>This email was sent through the " +
-49.                 "<a href='https://aws.amazon.com/ses'>Amazon SES</a> SMTP interface " +
-50.                 "using the .NET System.Net.Mail library.</p>";
-51. 
-52.             // Create and build a new MailMessage object
-53.             MailMessage message = new MailMessage();
-54.             message.IsBodyHtml = true;
-55.             message.From = new MailAddress(FROM, FROMNAME);
-56.             message.To.Add(new MailAddress(TO));
-57.             message.Subject = SUBJECT;
-58.             message.Body = BODY;
-59.             // Comment or delete the next line if you are not using a configuration set
-60.             message.Headers.Add("X-SES-CONFIGURATION-SET", CONFIGSET);
-61. 
-62.             using (var client = new System.Net.Mail.SmtpClient(HOST, PORT))
-63.             {
-64.                 // Pass SMTP credentials
-65.                 client.Credentials =
-66.                     new NetworkCredential(SMTP_USERNAME, SMTP_PASSWORD);
-67. 
-68.                 // Enable SSL encryption
-69.                 client.EnableSsl = true;
-70. 
-71.                 // Try to send the message. Show status in console.
-72.                 try
-73.                 {
-74.                     Console.WriteLine("Attempting to send email...");
-75.                     client.Send(message);
-76.                     Console.WriteLine("Email sent!");
-77.                 }
-78.                 catch (Exception ex)
-79.                 {
-80.                     Console.WriteLine("The email was not sent.");
-81.                     Console.WriteLine("Error message: " + ex.Message);
-82.                 }
-83.             }
-84.         }
-85.     }
-86. }
+45.             // The subject line of the email
+46.             String SUBJECT =
+47.                 "Amazon SES test (SMTP interface accessed using C#)";
+48. 
+49.             // The body of the email
+50.             String BODY =
+51.                 "<h1>Amazon SES Test</h1>" +
+52.                 "<p>This email was sent through the " +
+53.                 "<a href='https://aws.amazon.com/ses'>Amazon SES</a> SMTP interface " +
+54.                 "using the .NET System.Net.Mail library.</p>";
+55. 
+56.             // Create and build a new MailMessage object
+57.             MailMessage message = new MailMessage();
+58.             message.IsBodyHtml = true;
+59.             message.From = new MailAddress(FROM, FROMNAME);
+60.             message.To.Add(new MailAddress(TO));
+61.             message.Subject = SUBJECT;
+62.             message.Body = BODY;
+63.             // Comment or delete the next line if you are not using a configuration set
+64.             message.Headers.Add("X-SES-CONFIGURATION-SET", CONFIGSET);
+65.             // Add message tags to the header
+66.             message.Headers.Add("X-SES-MESSAGE-TAGS", TAG0);
+67.             message.Headers.Add("X-SES-MESSAGE-TAGS", TAG1);
+68.             
+69. 
+70.             using (var client = new System.Net.Mail.SmtpClient(HOST, PORT))
+71.             {
+72.                 // Pass SMTP credentials
+73.                 client.Credentials =
+74.                     new NetworkCredential(SMTP_USERNAME, SMTP_PASSWORD);
+75. 
+76.                 // Enable SSL encryption
+77.                 client.EnableSsl = true;
+78. 
+79.                 // Try to send the message. Show status in console.
+80.                 try
+81.                 {
+82.                     Console.WriteLine("Attempting to send email...");
+83.                     client.Send(message);
+84.                     Console.WriteLine("Email sent!");
+85.                 }
+86.                 catch (Exception ex)
+87.                 {
+88.                     Console.WriteLine("The email was not sent.");
+89.                     Console.WriteLine("Error message: " + ex.Message);
+90.                 }
+91.             }
+92.         }
+93.     }
+94. }
 ```
 
 ------
